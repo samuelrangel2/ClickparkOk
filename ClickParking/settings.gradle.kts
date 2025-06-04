@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ClickParking"
+rootProject.name = "Clickpark"
 include(":app")

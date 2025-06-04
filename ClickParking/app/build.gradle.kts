@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.clickparking"
+    namespace = "qi.projeto.whatev.clickpark"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.clickparking"
+        applicationId = "qi.projeto.whatev.clickpark"
         minSdk = 29
         targetSdk = 35
         versionCode = 1
@@ -30,8 +30,15 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    viewBinding {
+        enable = true
+    }
     kotlinOptions {
         jvmTarget = "11"
+
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
