@@ -29,8 +29,7 @@ class CarPlateDAO(context: Context) {
     fun getAllCarPlates(): List<CarPlateDTO> {
         val carPlates = mutableListOf<CarPlateDTO>()
         val db = dbHelper.readableDatabase
-        val s2 = "car_plates"                 
-            arrayOf("id", "plate")        
+        val s2 = arrayOf("id", "plate")
         
         // Se o cursor retornar dados, percorre cada linha
         val objCursor = db.query(false , "carros", arrayOf("id","plate","id_usuario"), null, null, null, null, null, null,)

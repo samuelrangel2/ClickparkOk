@@ -2,6 +2,8 @@ package qi.projeto.whatev.clickpark.controller
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import qi.projeto.whatev.clickpark.RecargaFragment
+import qi.projeto.whatev.clickpark.controller.placeholder.HomeFragment
 import qi.projeto.whatev.clickpark.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -15,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
         val homeFragment = HomeFragment()
         val recargaFragment = RecargaFragment()
-        val adicionarFragment = adicionarFragment()
+        val adicionarFragment = AdicionarFragment()
         supportFragmentManager.beginTransaction().apply {
             replace(binding.flfragmentholder.id,homeFragment)
             commit()

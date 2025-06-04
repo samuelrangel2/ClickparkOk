@@ -26,6 +26,9 @@ class UserDAO(context: Context) {
         val values = ContentValues().apply {
             put("creditos", user.creditos)
             put("expiracao_de_estacionamento", user.expiracaoDeEstacionamento.format(formatter))
+            put("email",user.email)
+            put("cpf",user.cpf)
+            put("senha",user.senha)
         }
         return db.insert("users", null, values)
     }

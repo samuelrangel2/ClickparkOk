@@ -19,6 +19,7 @@ class ConnectionBD(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 plate TEXT,
                 fk_id_usuario INTEGER
+                
             );
         """.trimIndent()
         db?.execSQL(createTableSQL) // Executa a query de criação da tabela
@@ -26,14 +27,34 @@ class ConnectionBD(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             CREATE TABLE usuarios (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 expiracao_de_estacionamento DATETIME,
-                creditos INTEGER
-                
+                creditos INTEGER,
+                cpf VARCHAR(12),
+                email VARCHAR(30),
+                senha VARCHAR(30)
             );""".trimIndent()
         db?.execSQL(createTableUsuarioSQL) // Executa a query de criação da tabela
 
 
 
     }
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         // Em caso de atualização da versão, a tabela antiga é removida e recriada
