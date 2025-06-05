@@ -2,6 +2,7 @@ package qi.projeto.whatev.clickpark.model.dao
 
 import android.content.ContentValues
 import android.content.Context
+import qi.projeto.whatev.clickpark.controller.MainActivity
 
 import qi.projeto.whatev.clickpark.model.connectdb.ConnectionBD
 
@@ -25,12 +26,12 @@ class UserDAO(context: Context) {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put("creditos", user.creditos)
-            put("expiracao_de_estacionamento", user.expiracaoDeEstacionamento.format(formatter))
+            put("expiracao_de_estacionamento", LocalDateTime.MIN.toString())
             put("email",user.email)
             put("cpf",user.cpf)
             put("senha",user.senha)
         }
-        return db.insert("users", null, values)
+        return db.insert("usuarios", null, values)
     }
 
     // READ
@@ -38,8 +39,8 @@ class UserDAO(context: Context) {
         val users = mutableListOf<UsuarioDTO>()
         val db = dbHelper.readableDatabase
         val cursor = db.query(
-            "users",
-            arrayOf("id", "creditos", "expiracao_de_estacionamento"),
+            "usuarios",
+            arrayOf("id", "creditos", "expiracao_de_estacionamento","cpf","senha","email"),
             null, null, null, null, null
         )
 
@@ -51,6 +52,9 @@ class UserDAO(context: Context) {
                     cursor.getString(cursor.getColumnIndexOrThrow("expiracao_de_estacionamento")),
                     formatter
                 )
+                cpf = cursor.getString(cursor.getColumnIndexOrThrow("cpf"))
+                senha = cursor.getString(cursor.getColumnIndexOrThrow("senha"))
+                email = cursor.getString(cursor.getColumnIndexOrThrow("email" ))
             }
             users.add(user)
         }
@@ -67,12 +71,12 @@ class UserDAO(context: Context) {
         }
         val whereClause = "id = ?"
         val whereArgs = arrayOf(user.id.toString())
-        return db.update("users", values, whereClause, whereArgs)
+        return db.update("usuarios", values, whereClause, whereArgs)
     }
 
     // DELETE
     fun deleteUser(id: Int): Int {
         val db = dbHelper.writableDatabase
-        return db.delete("users", "id = ?", arrayOf(id.toString()))
+        return db.delete("usuarios", "id = ?", arrayOf(id.toString()))
     }
 }

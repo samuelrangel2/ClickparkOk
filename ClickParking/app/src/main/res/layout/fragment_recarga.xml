@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnAdicionarFundos"
+        android:id="@+id/btnAdicionarMetodoDePagamento"
         style="@style/buttons"
         android:layout_width="220dp"
         android:layout_height="127dp"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnAdicionarFundos2"
+        android:id="@+id/btnAdicionarFundos"
         style="@style/buttons"
         android:layout_width="220dp"
         android:layout_height="127dp"
