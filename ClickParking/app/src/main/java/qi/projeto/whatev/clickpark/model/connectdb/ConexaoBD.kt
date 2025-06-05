@@ -18,7 +18,8 @@ class ConnectionBD(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             CREATE TABLE carros (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 plate TEXT,
-                fk_id_usuario INTEGER
+                fk_id_usuario INTEGER,
+                apelido VARCHAR(30)
                 
             );
         """.trimIndent()

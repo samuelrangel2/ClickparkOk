@@ -1,6 +1,8 @@
 package qi.projeto.whatev.clickpark.controller.placeholder
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import qi.projeto.whatev.clickpark.model.dao.UserDAO
 import qi.projeto.whatev.clickpark.model.dto.UsuarioDTO
 import java.time.Duration
 import java.time.LocalDateTime
+import kotlin.math.cos
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,26 +37,84 @@ class HomeFragment(private val userDAO: UserDAO,
         super.onCreate(savedInstanceState)
         binding = FragmentHomeBinding.inflate(layoutInflater)
         this.binding.btnAdicionarTempo.setOnClickListener {
-            val horas = this.binding.edtHoras.text.toString().toInt()
-            val minutos = this.binding.edtMinutos.text.toString().toInt()
-            val total:Long = (horas*60 +minutos).toLong()
+            var horas = 0
+            if (this.binding.edtHoras.text.toString().toIntOrNull()!=null) {
+                    horas = this.binding.edtHoras.text.toString().toInt()
+                }
 
-            var tempoatual = Duration.between(LocalDateTime.now(),usuarioDTO.expiracaoDeEstacionamento)
-            if (tempoatual.isNegative){
-                tempoatual = Duration.ZERO
+
+
+            var minutos =0
+
+            if (this.binding.edtMinutos.text.toString().toIntOrNull()!=null) {
+                minutos = this.binding.edtMinutos.text.toString().toInt()
             }
-            usuarioDTO!!.expiracaoDeEstacionamento = LocalDateTime.now().plus(tempoatual.plusMinutes(total))
-            
-            userDAO.updateUser(usuarioDTO!!)
+            val cost =  ((horas*60)+minutos)*6
+
+            if (cost<this.usuarioDTO.creditos){
+                usuarioDTO.creditos -= cost
+
+                userDAO.updateUser(usuarioDTO)
+
+                val total: Long = (horas * 60 + minutos).toLong()
+
+                var tempoatual =
+                    Duration.between(LocalDateTime.now(), usuarioDTO.expiracaoDeEstacionamento)
+                if (tempoatual.isNegative) {
+                    tempoatual = Duration.ZERO
+                }
+                usuarioDTO!!.expiracaoDeEstacionamento =
+                    LocalDateTime.now().plus(tempoatual.plusMinutes(total))
+
+                userDAO.updateUser(usuarioDTO!!)
+            }
         }
 
 
+        binding.edtHoras.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                updatecost()
+            }
 
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        binding.edtMinutos.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                updatecost()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
 
         lifecycleScope.launch {
             updatevalues()
         }
     }
+
+    fun updatecost(){
+
+        var horas = 0
+        if (this.binding.edtHoras.text.toString().toIntOrNull()!=null) {
+            horas = this.binding.edtHoras.text.toString().toInt()
+        }
+
+
+
+        var minutos =0
+
+        if (this.binding.edtMinutos.text.toString().toIntOrNull()!=null) {
+            minutos = this.binding.edtMinutos.text.toString().toInt()
+        }
+        val cost =  ((horas*60)+minutos)*6
+        val costAsFloat: Double = cost*0.01
+        this.binding.txtValorEmReais.setText("$costAsFloat R$")
+    }
+
+
+
     suspend fun updatevalues(){
         while (true) {
 

@@ -4,18 +4,18 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import qi.projeto.whatev.clickpark.model.connectdb.ConnectionBD
-import qi.projeto.whatev.clickpark.model.dto.CarPlateDTO
+import qi.projeto.whatev.clickpark.model.dto.CarDTO
 
 
 
-class CarPlateDAO(context: Context) {
+class CarDAO(context: Context) {
 
     private val dbHelper = ConnectionBD(context)
 
 
 
     // Função para inserir uma nova placa (CREATE)
-    fun addCarPlate(carPlate: CarPlateDTO): Long {
+    fun addCar(carPlate: CarDTO): Long {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {  // Prepara os valores para inserir na tabela
             put("plate", carPlate.plate)
@@ -26,23 +26,25 @@ class CarPlateDAO(context: Context) {
 
 
     // Função para ler todas as placas (READ)
-    fun getAllCarPlates(): List<CarPlateDTO> {
-        val carPlates = mutableListOf<CarPlateDTO>()
+    fun getAllCars(): List<CarDTO> {
+        val carPlates = mutableListOf<CarDTO>()
         val db = dbHelper.readableDatabase
-        val s2 = arrayOf("id", "plate")
+        val s2 = arrayOf("id", "plate","fk_id_usuario","apelido")
         
         // Se o cursor retornar dados, percorre cada linha
-        val objCursor = db.query(false , "carros", arrayOf("id","plate","id_usuario"), null, null, null, null, null, null,)
+        val objCursor = db.query(false , "carros", s2, null, null, null, null, null, null,)
 
         while (objCursor.moveToNext()) {
-            val objCarPlateDTO =CarPlateDTO()
+            val objCarDTO =CarDTO()
 
-            objCarPlateDTO.id= objCursor.getInt(objCursor.getColumnIndexOrThrow("id"))
+            objCarDTO.id= objCursor.getInt(objCursor.getColumnIndexOrThrow("id"))
 
 
-            objCarPlateDTO.plate= objCursor.getString(objCursor.getColumnIndexOrThrow("plate"))
+            objCarDTO.plate= objCursor.getString(objCursor.getColumnIndexOrThrow("plate"))
+            objCarDTO.idUsuario = objCursor.getInt(objCursor.getColumnIndexOrThrow("fk_id_usuario"))
+            objCarDTO.apelido= objCursor.getString(objCursor.getColumnIndexOrThrow("apelido"))
 
-            carPlates.add(objCarPlateDTO)
+            carPlates.add(objCarDTO)
         }
 
         objCursor.close()  // Fecha o cursor para liberar recursos
@@ -52,11 +54,12 @@ class CarPlateDAO(context: Context) {
 
 
 
-    fun updateCarPlate(carPlate: CarPlateDTO): Int {
+    fun updateCar(carPlate: CarDTO): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put("plate", carPlate.plate)
-            put("id_usuario",carPlate.idUsuario)
+            put("apelido",carPlate.apelido)
+            put("fk_id_usuario",carPlate.idUsuario)
 
         }
 
@@ -68,7 +71,7 @@ class CarPlateDAO(context: Context) {
     }
 
     // Função para excluir uma placa pelo ID (DELETE)
-    fun deleteCarPlate(id: Int): Int {
+    fun deleteCar(id: Int): Int {
         val db = dbHelper.writableDatabase
         // Remove a linha cujo id corresponda ao informado
         return db.delete("car_plates", "id=?", arrayOf(id.toString()))

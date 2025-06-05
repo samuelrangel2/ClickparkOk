@@ -6,29 +6,54 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import qi.projeto.whatev.clickpark.R
+import qi.projeto.whatev.clickpark.databinding.FragmentAdicionarBinding
+import qi.projeto.whatev.clickpark.model.dao.CarDAO
 import qi.projeto.whatev.clickpark.model.dao.UserDAO
+import qi.projeto.whatev.clickpark.model.dto.CarDTO
 import qi.projeto.whatev.clickpark.model.dto.UsuarioDTO
 
 
 class AdicionarFragment(private val userDAO: UserDAO,
                         private var usuarioDTO: UsuarioDTO
 ) : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+    lateinit var binding: FragmentAdicionarBinding
+    var carroslista: MutableList<CarDTO> = arrayListOf<CarDTO>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = FragmentAdicionarBinding.inflate(layoutInflater)
+        binding.btnAdicionarcarro.setOnClickListener {
+            val carro = CarDTO()
+            carro.plate = this.binding.edtPlaca1.text.toString()
+            carro.idUsuario = usuarioDTO.id
+            carro.apelido = this.binding.edtApelido.text.toString()
+
+
+
+
+        }
 
 
     }
+    fun updateCarros(){
+        val carDAO = CarDAO(requireContext())
+        for (car in carDAO.getAllCars()){
+            if (car.idUsuario==usuarioDTO.id){
+                carroslista.add(car)
 
+            }
+
+
+        }
+        
+
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_adicionar, container, false)
+        return binding.root
     }
 
     companion object {
