@@ -19,8 +19,10 @@ class CarDAO(context: Context) {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {  // Prepara os valores para inserir na tabela
             put("plate", carPlate.plate)
+            put("apelido",carPlate.apelido)
+            put("fk_id_usuario",carPlate.idUsuario)
         }
-        return db.insert("car_plates", null, values)  // Insere os dados e retorna o ID da nova linha
+        return db.insert("carros", null, values)  // Insere os dados e retorna o ID da nova linha
     }
 
 
@@ -67,13 +69,13 @@ class CarDAO(context: Context) {
         val whereClause = "id = ?"
         val whereArgs = arrayOf(carPlate.id.toString())
 
-        return db.update("car_plates", values, whereClause, whereArgs)
+        return db.update("carros", values, whereClause, whereArgs)
     }
 
     // Função para excluir uma placa pelo ID (DELETE)
     fun deleteCar(id: Int): Int {
         val db = dbHelper.writableDatabase
         // Remove a linha cujo id corresponda ao informado
-        return db.delete("car_plates", "id=?", arrayOf(id.toString()))
+        return db.delete("carros", "id=?", arrayOf(id.toString()))
     }
 }

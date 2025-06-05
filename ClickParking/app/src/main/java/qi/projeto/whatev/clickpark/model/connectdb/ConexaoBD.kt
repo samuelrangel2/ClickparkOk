@@ -14,12 +14,14 @@ class ConnectionBD(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
     override fun onCreate(db: SQLiteDatabase?) {
         // Definindo a query para criar a tabela "car_plates" com campo id (autoincrement) e plate (texto)
+
         val createTableSQL = """
             CREATE TABLE carros (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 plate TEXT,
                 fk_id_usuario INTEGER,
-                apelido VARCHAR(30)
+                apelido VARCHAR(30),
+                FOREIGN KEY (fk_usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE
                 
             );
         """.trimIndent()

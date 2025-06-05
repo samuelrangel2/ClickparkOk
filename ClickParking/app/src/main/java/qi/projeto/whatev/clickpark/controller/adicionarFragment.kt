@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.recyclerview.widget.RecyclerView
 import qi.projeto.whatev.clickpark.R
 import qi.projeto.whatev.clickpark.databinding.FragmentAdicionarBinding
 import qi.projeto.whatev.clickpark.model.dao.CarDAO
@@ -17,37 +19,67 @@ class AdicionarFragment(private val userDAO: UserDAO,
                         private var usuarioDTO: UsuarioDTO
 ) : Fragment() {
     lateinit var binding: FragmentAdicionarBinding
-    var carroslista: MutableList<CarDTO> = arrayListOf<CarDTO>()
+    var carrosLista: MutableList<CarDTO> = arrayListOf<CarDTO>()
+    lateinit var adapter : ArrayAdapter<CarDTO>
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentAdicionarBinding.inflate(layoutInflater)
+
+
+
+
+
+        adapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,carrosLista)
+
+        binding.listveiculo.adapter = adapter
+
+        updateCarros()
         binding.btnAdicionarcarro.setOnClickListener {
             val carro = CarDTO()
             carro.plate = this.binding.edtPlaca1.text.toString()
             carro.idUsuario = usuarioDTO.id
             carro.apelido = this.binding.edtApelido.text.toString()
 
-
-
+            val carDAO = CarDAO(requireContext())
+            carDAO.addCar(carro)
+            updateCarros()
 
         }
 
 
     }
     fun updateCarros(){
+        carrosLista.clear()
+
+
         val carDAO = CarDAO(requireContext())
         for (car in carDAO.getAllCars()){
             if (car.idUsuario==usuarioDTO.id){
-                carroslista.add(car)
+                carrosLista.add(car)
 
             }
 
 
         }
-        
 
 
+
+
+
+        binding.listveiculo.invalidate()
     }
+
+
+
+
+
+
+
+
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

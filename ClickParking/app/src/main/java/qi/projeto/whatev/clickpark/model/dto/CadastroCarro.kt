@@ -6,6 +6,6 @@ class CarDTO(): Serializable {
     var id: Int = 0
     var plate : String = ""
     var idUsuario : Int = 0
-    var apelido: String = ""
+    var apelido: String? = ""
 
 }
